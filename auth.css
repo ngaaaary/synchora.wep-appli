@@ -1,0 +1,176 @@
+/* auth.css */
+
+/* Variables CSS communes pour les thèmes clair et sombre */
+:root {
+    --primary-color: #007bff; /* Bleu vibrant */
+    --primary-color-dark: #0056b3;
+    --primary-color-light: rgba(0, 123, 255, 0.2);
+    --secondary-color: #6c757d; /* Gris secondaire */
+    --text-color: #333; /* Texte sombre pour thème clair */
+    --text-color-secondary: #555;
+    --background-color-light: #f4f7f6; /* Fond très clair */
+    --background-color-dark: #1a202c; /* Fond sombre pour thème sombre */
+    --card-background: #ffffff; /* Fond des cartes/conteneurs */
+    --border-color: #dee2e6; /* Bordures subtiles */
+    --input-background: #f8f9fa; /* Fond des champs de saisie */
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+}
+
+/* Thème sombre (à activer via JavaScript sur body[data-theme="dark"]) */
+body[data-theme="dark"] {
+    --text-color: #e2e8f0;
+    --text-color-secondary: #a0aec0;
+    --background-color-light: #2d3748; /* Fond légèrement plus clair que le dark global */
+    --background-color-dark: #1a202c;
+    --card-background: #202a3a; /* Fond des cartes en sombre */
+    --border-color: #4a5568;
+    --input-background: #2c3340;
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles généraux pour les pages d'authentification */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-color-light); /* Utilisation des variables CSS */
+    color: var(--text-color);
+    margin: 0;
+    font-family: 'Inter', sans-serif; /* Assurez-vous d'importer cette police ou utilisez une alternative */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow: hidden; /* Pour éviter les barres de défilement si le contenu est trop grand */
+}
+
+.auth-container {
+    background-color: var(--card-background);
+    padding: 40px 50px; /* Plus de padding pour un look plus aéré */
+    border-radius: 16px; /* Bords plus arrondis */
+    box-shadow: var(--shadow-light);
+    width: 100%;
+    max-width: 450px; /* Un peu plus large */
+    text-align: center;
+    box-sizing: border-box; /* Inclure padding et border dans la largeur */
+    animation: fadeIn 0.5s ease-out; /* Petite animation d'apparition */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-container h2 {
+    color: var(--primary-color);
+    margin-bottom: 30px; /* Plus d'espace */
+    font-size: 2.2em; /* Titre plus grand */
+    font-weight: 700;
+}
+
+.auth-container .logo {
+    font-size: 2.8em; /* Logo plus grand */
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espace entre icône et texte */
+}
+
+.input-group {
+    margin-bottom: 25px; /* Plus d'espace entre les groupes */
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px; /* Plus d'espace entre label et input */
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    font-size: 0.95em;
+}
+
+.input-group input {
+    width: 100%; /* Occupe toute la largeur disponible */
+    padding: 14px 15px; /* Plus de padding */
+    border: 1px solid var(--border-color);
+    border-radius: 8px; /* Bords plus arrondis */
+    font-size: 1.05em;
+    background-color: var(--input-background);
+    color: var(--text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    box-sizing: border-box; /* Important pour que le padding n'ajoute pas à la largeur */
+}
+
+.input-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-color-light); /* Ombre plus prononcée au focus */
+    outline: none;
+    background-color: var(--card-background); /* Fond blanc au focus pour le contraste */
+}
+
+.auth-button {
+    width: 100%;
+    padding: 15px; /* Plus de padding pour le bouton */
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.15em; /* Texte du bouton plus grand */
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2); /* Ombre légère pour le bouton */
+}
+
+.auth-button:hover {
+    background-color: var(--primary-color-dark);
+    transform: translateY(-2px); /* Effet de léger soulèvement */
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3); /* Ombre plus forte au survol */
+}
+
+.auth-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Effet de clic */
+}
+
+.link-text {
+    margin-top: 25px; /* Plus d'espace */
+    font-size: 0.98em;
+    color: var(--text-color-secondary);
+}
+
+.link-text a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 700; /* Plus de poids pour le lien */
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.link-text a:hover {
+    color: var(--primary-color-dark);
+    text-decoration: underline;
+}
+
+.error-message {
+    color: var(--danger-color);
+    margin-top: -15px; /* Pour remonter le message d'erreur près du champ */
+    margin-bottom: 15px;
+    font-size: 0.88em;
+    text-align: left;
+    display: none; /* Masqué par défaut, affiché par JavaScript */
+    animation: fadeIn 0.3s ease-out;
+}
+
+.success-message {
+    color: var(--success-color);
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Ajoutez une police moderne comme Inter (ou similaire) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');

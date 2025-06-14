@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion à Synchora</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Variables CSS (adaptées pour un thème cohérent) */
+        :root {
+            --primary-color: #5A67D8; /* Un bleu-violet plus sophistiqué */
+            --primary-color-dark: #434B8F;
+            --primary-color-light: rgba(90, 103, 216, 0.2);
+            --secondary-color: #6C757D;
+            --text-color: #2D3748; /* Gris très foncé pour le texte */
+            --text-color-light: #F7FAFC; /* Texte clair pour les fonds sombres */
+            --text-color-secondary: #718096; /* Gris moyen pour les labels/liens */
+            --background-color: #EDF2F7; /* Un gris très clair, presque blanc cassé */
+            --card-background: #FFFFFF;
+            --border-color: #E2E8F0;
+            --input-background: #F7FAFC; /* Fond des inputs un peu plus clair */
+            --shadow-light: 0 10px 25px rgba(0, 0, 0, 0.1); /* Ombre plus douce */
+            --success-color: #48BB78;
+            --danger-color: #FC8181;
+            --font-family-body: 'Inter', sans-serif;
+            --font-family-heading: 'Playfair Display', serif; /* Nouvelle police pour les titres */
+        }
+
+        /* Thème sombre (avec des couleurs ajustées pour le contraste) */
+        body[data-theme="dark"] {
+            --primary-color: #9F7AEA; /* Violet plus clair pour le sombre */
+            --primary-color-dark: #805AD5;
+            --primary-color-light: rgba(159, 122, 234, 0.2);
+            --text-color: #E2E8F0;
+            --text-color-light: #1A202C;
+            --text-color-secondary: #A0AEC0;
+            --background-color: #1A202C;
+            --card-background: #2D3748;
+            --border-color: #4A5568;
+            --input-background: #2C3340;
+            --shadow-light: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            display: flex;
+            font-family: var(--font-family-body);
+            margin: 0;
+            min-height: 100vh;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .split-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background-color: var(--card-background);
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            box-shadow: var(--shadow-light);
+            animation: slideInLeft 0.8s ease-out;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .right-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite alternate;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-color-light);
+            text-align: center;
+            padding: 40px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.8s ease-out, gradientAnimation 10s ease infinite alternate;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .right-panel::before, .right-panel::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            filter: blur(50px);
+            background: rgba(255, 255, 255, 0.2);
+            animation: pulse 5s infinite ease-in-out alternate;
+        }
+        .right-panel::before {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+        }
+        .right-panel::after {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 1s;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.1; }
+            100% { transform: scale(1.1); opacity: 0.2; }
+        }
+
+        .right-panel .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            width: 100%;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .right-panel h1 {
+            font-family: var(--font-family-heading);
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 0;
+        }
+
+        .right-panel p {
+            font-size: 1.2em;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .auth-form-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .auth-form-container .logo {
+            font-size: 3em;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .auth-form-container h2 {
+            font-family: var(--font-family-heading);
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-color-secondary);
+            font-size: 0.95em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1.1em;
+            background-color: var(--input-background);
+            color: var(--text-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 5px var(--primary-color-light);
+            outline: none;
+            background-color: var(--card-background);
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary-color);
+            color: var(--text-color-light);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-button:hover {
+            background-color: var(--primary-color-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-text {
+            margin-top: 30px;
+            font-size: 1em;
+            color: var(--text-color-secondary);
+        }
+
+        .link-text a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+
+        .link-text a:hover {
+            color: var(--primary-color-dark);
+            text-decoration: underline;
+        }
+
+        .error-message, .success-message {
+            margin-top: 15px;
+            margin-bottom: 25px;
+            font-size: 0.95em;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background-color: rgba(255, 0, 0, 0.1);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+        .success-message {
+            background-color: rgba(0, 255, 0, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .ceo-signature {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: auto;
+            padding-top: 20px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.05em;
+        }
+
+        /* Animations d'entrée */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Media Queries pour les petits écrans (pour que ça reste beau sur mobile) */
+        @media (max-width: 768px) {
+            .split-container {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .left-panel, .right-panel {
+                flex: none;
+                width: 100%;
+                min-height: 70vh;
+                padding: 30px 20px;
+                overflow-y: visible;
+            }
+
+            .right-panel {
+                order: -1;
+                min-height: 30vh;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+            .right-panel .content-wrapper {
+                 padding-top: 0;
+                 padding-bottom: 0;
+            }
+
+            .auth-form-container {
+                max-width: 320px;
+            }
+
+            .right-panel h1 {
+                font-size: 2.5em;
+            }
+            .right-panel p {
+                font-size: 1em;
+            }
+            .ceo-signature {
+                margin-top: 20px;
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="split-container">
+        <div class="left-panel">
+            <div class="auth-form-container">
+                <div class="logo">
+                    <i class="fas fa-sync-alt"></i> Synchora
+                </div>
+                <h2>Bienvenue de retour !</h2>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" name="email" required autocomplete="email" placeholder="votre.email@exemple.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="loginPassword">Mot de passe</label>
+                        <input type="password" id="loginPassword" name="password" required autocomplete="current-password" placeholder="********">
+                    </div>
+                    <p class="error-message" id="loginErrorMessage">Email ou mot de passe incorrect.</p>
+                    <p class="success-message" id="loginSuccessMessage">Connexion réussie ! Redirection...</p>
+                    <button type="submit" class="auth-button">Se connecter</button>
+                </form>
+                <p class="link-text">
+                    Vous n'avez pas de compte ? <a href="register.html">Inscrivez-vous ici</a>
+                </p>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="content-wrapper">
+                <h1>Libérez votre potentiel.</h1>
+                <p>Synchora est la solution intuitive pour organiser vos tâches, gérer vos projets et maîtriser votre emploi du temps.</p>
+            </div>
+            <p class="ceo-signature">CEO Ngary.dp</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const loginErrorMessage = document.getElementById('loginErrorMessage');
+            const loginSuccessMessage = document.getElementById('loginSuccessMessage');
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault(); // Empêche le rechargement de la page
+
+                    const email = document.getElementById('loginEmail').value.trim();
+                    const password = document.getElementById('loginPassword').value.trim();
+
+                    loginErrorMessage.style.display = 'none'; // Cache l'erreur
+                    loginSuccessMessage.style.display = 'none'; // Cache le succès
+
+                    if (!email || !password) {
+                        loginErrorMessage.textContent = 'Veuillez remplir tous les champs.';
+                        loginErrorMessage.style.display = 'block';
+                        return; // Arrête l'exécution si les champs sont vides
+                    }
+
+                    // --- LOGIQUE DE SIMULATION D'AUTHENTIFICATION ---
+                    // Ces identifiants sont fixes et doivent être utilisés pour la connexion
+                    const MOCK_EMAIL = 'test@synchora.com';
+                    const MOCK_PASSWORD = 'password123';
+
+                    if (email === MOCK_EMAIL && password === MOCK_PASSWORD) {
+                        // Si les identifiants correspondent, affiche le succès
+                        loginSuccessMessage.textContent = 'Connexion réussie ! Redirection vers l\'application...';
+                        loginSuccessMessage.style.display = 'block';
+                        
+                        // Redirection réelle après un court délai pour que le message soit visible
+                        setTimeout(() => {
+                            window.location.href = 'app.html'; // <<< C'EST LA REDIRECTION VERS LA VRAIE APPLI
+                        }, 1500); // 1.5 secondes de délai
+                    } else {
+                        // Si les identifiants ne correspondent pas, affiche l'erreur
+                        loginErrorMessage.textContent = 'Email ou mot de passe incorrect.';
+                        loginErrorMessage.style.display = 'block';
+                        console.error('Tentative de connexion échouée:', { email, password });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

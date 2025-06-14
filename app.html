@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synchora - Votre Gestionnaire de Tâches</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-sync-alt icon"></i>
+                <span class="logo-text">Synchora</span>
+            </div>
+            <nav class="nav-list">
+                <a href="#dashboard" class="nav-item">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span class="nav-text">Tableau de Bord</span>
+                </a>
+                <a href="#tasks" class="nav-item">
+                    <i class="fas fa-check-double nav-icon"></i>
+                    <span class="nav-text">Mes Tâches</span>
+                </a>
+                <a href="#calendar" class="nav-item active">
+                    <i class="fas fa-calendar-alt nav-icon"></i>
+                    <span class="nav-text">Calendrier</span>
+                </a>
+                <a href="#projects" class="nav-item">
+                    <i class="fas fa-project-diagram nav-icon"></i>
+                    <span class="nav-text">Projets & Espaces</span>
+                </a>
+                <a href="#reports" class="nav-item">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                    <span class="nav-text">Rapports</span>
+                </a>
+                <a href="#settings" class="nav-item">
+                    <i class="fas fa-cog nav-icon"></i>
+                    <span class="nav-text">Paramètres</span>
+                </a>
+            </nav>
+            <button class="add-new-btn">
+                <i class="fas fa-plus"></i>
+                <span class="add-new-text">Ajouter Nouveau</span>
+            </button>
+
+            <div class="user-profile">
+                <div class="avatar">JS</div>
+                <div class="user-info">
+                    <p>Ngaary dp</p>
+                    <small>Premium User</small>
+                </div>
+                <ul class="profile-dropdown-menu">
+                    <li><a href="#"><i class="fas fa-user-circle"></i> Mon Profil</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Aide</a></li>
+                    <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+                </ul>
+            </div>
+            <button class="toggle-sidebar-btn"><i class="fas fa-chevron-left"></i></button>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h1 id="pageTitle">Tableau de Bord</h1>
+            </header>
+
+            <section id="dashboard" class="content-section active">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <span class="value" id="tasksDueToday">0</span>
+                        <span class="label">Tâches pour Aujourd'hui</span>
+                    </div>
+                    <div class="dashboard-card">
+                        <span class="value" id="upcomingEvents">0</span>
+                        <span class="label">Événements à Venir</span>
+                    </div>
+                    <div class="dashboard-card">
+                        <span class="value" id="tasksCompletedThisWeek">0</span>
+                        <span class="label">Tâches Terminées (Cette Semaine)</span>
+                    </div>
+                    <div class="dashboard-card">
+                        <span class="value" id="focusTimeToday">0h 0m</span>
+                        <span class="label">Temps de Concentration (Aujourd'hui)</span>
+                    </div>
+                </div>
+                <div class="recent-activity">
+                    <h3>Activité Récente</h3>
+                    <ul class="activity-list" id="recentActivityList">
+                        <li class="activity-item placeholder" id="emptyActivityListMessage">
+                            <i class="fas fa-box-open"></i>
+                            <span class="placeholder-text">
+                                **Aucune activité récente à afficher.**
+                                Commencez à organiser vos tâches et projets pour voir vos progrès ici !
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="tasks" class="content-section">
+                <div class="tasks-controls">
+                    <div class="form-group">
+                        <label for="taskFilterCategory">Catégorie :</label>
+                        <select id="taskFilterCategory">
+                            <option value="all">Toutes</option>
+                            <option value="work">Travail</option>
+                            <option value="study">Études</option>
+                            <option value="personal">Personnel</option>
+                            <option value="health">Santé</option>
+                            <option value="finance">Finances</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskFilterStatus">Statut :</label>
+                        <select id="taskFilterStatus">
+                            <option value="all">Tous</option>
+                            <option value="pending">En attente</option>
+                            <option value="completed">Terminées</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskSearchInput">Rechercher :</label>
+                        <input type="text" id="taskSearchInput" placeholder="Rechercher une tâche...">
+                    </div>
+                </div>
+                <ul class="tasks-list" id="taskList">
+                    <li class="task-item" draggable="true" data-task-id="task-1">
+                        <div class="task-content">
+                            <input type="checkbox" class="task-checkbox">
+                            <span class="task-title">Préparer la présentation pour le client X</span>
+                        </div>
+                        <div class="task-actions">
+                            <i class="fas fa-edit edit-icon"></i>
+                            <i class="fas fa-trash-alt delete-icon"></i>
+                        </div>
+                    </li>
+                    <li class="task-item" draggable="true" data-task-id="task-2">
+                        <div class="task-content">
+                            <input type="checkbox" class="task-checkbox">
+                            <span class="task-title">Envoyer le rapport mensuel</span>
+                        </div>
+                        <div class="task-actions">
+                            <i class="fas fa-edit edit-icon"></i>
+                            <i class="fas fa-trash-alt delete-icon"></i>
+                        </div>
+                    </li>
+                    <li class="task-item" draggable="true" data-task-id="task-3">
+                        <div class="task-content">
+                            <input type="checkbox" class="task-checkbox" checked>
+                            <span class="task-title" style="text-decoration: line-through; opacity: 0.7;">Organiser la réunion d'équipe (Terminé)</span>
+                        </div>
+                        <div class="task-actions">
+                            <i class="fas fa-edit edit-icon"></i>
+                            <i class="fas fa-trash-alt delete-icon"></i>
+                        </div>
+                    </li>
+                    <li class="task-item placeholder" id="emptyTaskListMessage">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="placeholder-text">
+                            Votre liste de tâches est actuellement vide ou aucun résultat ne correspond à vos filtres.
+                            **Ajoutez une nouvelle tâche** pour démarrer ou **ajustez vos filtres** pour explorer davantage.
+                        </span>
+                    </li>
+                </ul>
+                <button class="add-task-floating-btn" aria-label="Ajouter une nouvelle tâche">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </section>
+
+            <section id="calendar" class="content-section">
+                <div class="calendar-controls">
+                    <div class="nav-buttons">
+                        <button id="prevViewBtn"><i class="fas fa-chevron-left"></i></button>
+                        <h2 id="currentCalendarView"></h2>
+                        <button id="nextViewBtn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="view-switcher">
+                        <button class="view-btn" data-view="month">Mois</button>
+                        <button class="view-btn" data-view="week">Semaine</button>
+                        <button class="view-btn" data-view="day">Jour</button>
+                    </div>
+                </div>
+                <div class="calendar-display" id="calendarDisplay">
+                    </div>
+            </section>
+
+            <section id="projects" class="content-section">
+                <div class="projects-header">
+                    <h3>Mes Projets</h3>
+                    <button class="add-project-btn"><i class="fas fa-plus"></i> Nouveau Projet</button>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="projectSearch" placeholder="Rechercher un projet...">
+                </div>
+                <ul class="projects-grid" id="projectList">
+                    <li class="project-card placeholder" id="emptyProjectListMessage">
+                        <i class="fas fa-lightbulb"></i>
+                        <span class="placeholder-text">
+                            **Donnez vie à vos idées !** Aucun projet n'a été créé.
+                            Lancez-vous en créant votre **premier projet** pour une organisation thématique de vos tâches.
+                        </span>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="reports" class="content-section">
+                <div class="reports-grid">
+                    <div class="chart-container">
+                        <h4>Répartition des Tâches par Catégorie</h4>
+                        <canvas id="tasksByCategoryChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h4>Progression des Projets (Prochainement)</h4>
+                        <canvas id="timeSpentByProjectChart"></canvas>
+                    </div>
+                    <div class="metrics-card">
+                        <h4>Taux de Complétion Global</h4>
+                        <span class="metric-value" id="completionRate">75%</span>
+                    </div>
+                    <div class="metrics-card">
+                        <h4>Moyenne Tâches/Jour</h4>
+                        <span class="metric-value" id="avgTasksPerDay">5</span>
+                    </div>
+                    <div class="metrics-card">
+                        <h4>Heures de Concentration Totales</h4>
+                        <span class="metric-value" id="totalFocusHours">45h</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="settings" class="content-section">
+                <div class="settings-section">
+                    <h3>Paramètres de l'Application</h3>
+
+                    <div class="setting-group">
+                        <label>Thème de l'application :</label>
+                        <div class="radio-group">
+                            <input type="radio" id="themeLight" name="app-theme" value="light">
+                            <label for="themeLight">Clair</label>
+                            <input type="radio" id="themeDark" name="app-theme" value="dark">
+                            <label for="themeDark">Sombre</label>
+                            <input type="radio" id="themeSystem" name="app-theme" value="system" checked>
+                            <label for="themeSystem">Système</label>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label>Notifications :</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="enablePushNotifications">
+                            <label for="enablePushNotifications">Activer les notifications push</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="enableEmailNotifications">
+                            <label for="enableEmailNotifications">Recevoir des notifications par e-mail</label>
+                        </div>
+                    </div>
+
+                    <button class="save-settings-btn">Sauvegarder les Paramètres</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="genericModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Titre de la Modale</h2>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body" id="modalDescription">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // --- SCRIPT POUR LES DIAGRAMMES CHART.JS ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Diagramme : Tâches par Catégorie (Doughnut Chart)
+            const tasksByCategoryCtx = document.getElementById('tasksByCategoryChart');
+            if (tasksByCategoryCtx) {
+                new Chart(tasksByCategoryCtx, {
+                    type: 'doughnut', // Type de diagramme en forme d'anneau
+                    data: {
+                        labels: ['Travail', 'Études', 'Personnel', 'Urgent', 'Santé', 'Finances'],
+                        datasets: [{
+                            label: 'Nombre de Tâches',
+                            data: [30, 20, 15, 10, 8, 5], // Données exemple (à remplacer par vos données réelles)
+                            backgroundColor: [
+                                'rgba(90, 103, 216, 0.9)', // Bleu principal
+                                'rgba(75, 192, 192, 0.9)', // Vert cyan
+                                'rgba(255, 159, 64, 0.9)', // Orange
+                                'rgba(239, 68, 68, 0.9)', // Rouge pour urgent
+                                'rgba(54, 162, 235, 0.9)', // Bleu clair
+                                'rgba(153, 102, 255, 0.9)' // Violet
+                            ],
+                            borderColor: [
+                                'rgba(255, 255, 255, 1)',
+                                'rgba(255, 255, 255, 1)',
+                                'rgba(255, 255, 255, 1)',
+                                'rgba(255, 255, 255, 1)',
+                                'rgba(255, 255, 255, 1)',
+                                'rgba(255, 255, 255, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false, // Important pour contrôler la taille avec le CSS
+                        cutout: '70%', // Taille du "trou" central pour le doughnut
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'right', // Légende à droite
+                                labels: {
+                                    font: {
+                                        size: 13,
+                                        family: 'Open Sans'
+                                    },
+                                    color: '#4a5568'
+                                }
+                            },
+                            title: {
+                                display: false, // Le titre est déjà dans le H4 du HTML
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + ' tâches'; // Afficher "X tâches"
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Placeholder pour le deuxième diagramme (Temps Passé par Projet)
+            const timeSpentByProjectCtx = document.getElementById('timeSpentByProjectChart');
+            if (timeSpentByProjectCtx) {
+                new Chart(timeSpentByProjectCtx, {
+                    type: 'bar', // Peut être changé en 'line', 'pie', etc.
+                    data: {
+                        labels: ['Projet A', 'Projet B', 'Projet C', 'Projet D'],
+                        datasets: [{
+                            label: 'Heures (Exemple)',
+                            data: [0, 0, 0, 0], // Données à 0 pour indiquer "Prochainement"
+                            backgroundColor: 'rgba(160, 174, 192, 0.6)',
+                            borderColor: 'rgba(160, 174, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Données Non Disponibles (Prochainement)',
+                                font: {
+                                    size: 16
+                                },
+                                color: '#718096'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    display: false
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        // --- FIN DU SCRIPT POUR LES DIAGRAMMES CHART.JS ---
+    </script>
+</body>
+</html>

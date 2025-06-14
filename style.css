@@ -1,0 +1,1518 @@
+/* style.css */
+
+/* --- Variables CSS (Thèmes) --- */
+:root {
+    /* Couleurs Claires (Thème par défaut) */
+    --primary-color: #007bff; /* Bleu principal */
+    --primary-color-dark: #0056b3;
+    --accent-color: #28a745; /* Vert accent */
+    --accent-color-dark: #218838;
+    --secondary-color: #6c757d; /* Gris secondaire */
+    --background-color: #f8f9fa; /* Arrière-plan clair */
+    --surface-color: #ffffff; /* Surfaces (cartes, modales) */
+    --border-color: #e9ecef; /* Bordures et séparateurs */
+    --text-color: #343a40; /* Texte foncé */
+    --text-color-light: #ffffff; /* Texte clair (sur les couleurs vives) */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Ombre légère */
+    --danger-color: #dc3545; /* Rouge pour actions dangereuses */
+    --warn-color: #ffc107; /* Jaune pour avertissements */
+
+    /* Espacements */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    /* Rayons de bordure */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+
+    /* Nouvelles polices */
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+}
+
+/* Thème Sombre */
+.dark-theme {
+    --primary-color: #4a90e2; /* Bleu plus doux */
+    --primary-color-dark: #357bd8;
+    --accent-color: #6dd47e; /* Vert plus clair */
+    --accent-color-dark: #5cb85c;
+    --secondary-color: #adb5bd; /* Gris clair */
+    --background-color: #2c2c2c; /* Arrière-plan foncé */
+    --surface-color: #3a3a3a; /* Surfaces foncées */
+    --border-color: #444444; /* Bordures foncées */
+    --text-color: #e0e0e0; /* Texte clair */
+    --text-color-light: #ffffff; /* Texte clair (sur les couleurs vives) */
+    --shadow-color: rgba(0, 0, 0, 0.3); /* Ombre plus prononcée */
+    --danger-color: #ef476f; /* Rouge plus vif */
+    --warn-color: #ffd166; /* Jaune plus vif */
+}
+
+/* --- Styles Généraux --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-body); /* Applique Open Sans au corps du texte */
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden; /* Empêche le défilement horizontal */
+}
+
+h1, h2, h3, h4, h5, h6, .logo-text, .nav-item, .dashboard-card .value {
+    font-family: var(--font-heading); /* Applique Montserrat aux titres et éléments importants */
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+    background-color: var(--primary-color-dark);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+/* --- Layout Principal --- */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: var(--surface-color);
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease, transform 0.3s ease;
+    flex-shrink: 0; /* Empêche la sidebar de se rétrécir au-delà de sa taille */
+    z-index: 1000; /* Assure que la sidebar est au-dessus du contenu */
+    position: relative; /* Pour le bouton toggle */
+}
+
+.sidebar.collapsed {
+    width: 80px; /* Taille réduite */
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-text,
+.sidebar.collapsed .user-info p,
+.sidebar.collapsed .add-new-text {
+    display: none;
+}
+
+.sidebar.collapsed .nav-item {
+    justify-content: center; /* Centre les icônes quand le texte disparaît */
+}
+
+.sidebar.collapsed .user-profile .avatar {
+    margin-right: 0;
+}
+
+.sidebar.collapsed .add-new-btn {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%; /* Bouton rond */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar.collapsed .toggle-sidebar-btn {
+    left: 100%;
+    transform: translateX(-50%) rotate(180deg); /* Inverse la flèche */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-sm);
+}
+
+.logo .icon {
+    font-size: 1.8em;
+    color: var(--primary-color);
+    margin-right: var(--spacing-sm);
+}
+
+.logo-text {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--text-color);
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+}
+
+.nav-list {
+    list-style: none;
+    flex-grow: 1; /* Permet à la liste de prendre l'espace disponible */
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+.nav-item .nav-icon {
+    font-size: 1.2em;
+    margin-right: var(--spacing-md);
+}
+
+.nav-item.active .nav-icon {
+    color: var(--text-color-light);
+}
+
+.add-new-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: var(--spacing-md);
+    background-color: var(--accent-color);
+    padding: var(--spacing-md);
+}
+
+.add-new-btn:hover {
+    background-color: var(--accent-color-dark);
+}
+
+.add-new-btn .fas {
+    margin-right: var(--spacing-sm);
+}
+
+.add-new-btn .add-new-text {
+    white-space: nowrap;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    margin-top: var(--spacing-lg);
+    cursor: pointer;
+    position: relative; /* Pour le dropdown */
+}
+
+.user-profile .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color-light);
+    font-weight: bold;
+    margin-right: var(--spacing-md);
+    flex-shrink: 0;
+}
+
+.user-info p {
+    margin: 0;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-info small {
+    color: var(--secondary-color);
+    white-space: nowrap;
+}
+
+.profile-dropdown-menu {
+    position: absolute;
+    bottom: calc(100% + var(--spacing-sm)); /* Au-dessus du profil */
+    left: var(--spacing-md);
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-color);
+    list-style: none;
+    padding: var(--spacing-sm) 0;
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    z-index: 1001; /* Au-dessus de tout */
+}
+
+.user-profile.active .profile-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.profile-dropdown-menu li a {
+    display: block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--text-color);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.profile-dropdown-menu li a:hover {
+    background-color: var(--background-color);
+    text-decoration: none;
+}
+
+.toggle-sidebar-btn {
+    position: absolute;
+    top: var(--spacing-md);
+    right: -20px; /* Positionné à l'extérieur de la sidebar */
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    z-index: 1001;
+    transition: transform 0.3s ease, right 0.3s ease;
+}
+
+/* Main Content Area */
+.main-content {
+    flex-grow: 1;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    overflow-y: auto; /* Permet le défilement du contenu principal */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.header h1 {
+    color: var(--text-color);
+    font-size: 2em;
+}
+
+/* Content Sections */
+.content-section {
+    display: none; /* Toutes les sections sont cachées par défaut */
+    animation: fadeIn 0.5s ease-out;
+}
+
+.content-section.active {
+    display: block; /* La section active est affichée */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Modale Générique --- */
+.modal {
+    display: none; /* Caché par défaut */
+    position: fixed;
+    z-index: 2000; /* Au-dessus de tout */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Fond noir semi-transparent */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--surface-color);
+    margin: auto;
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 5px 15px var(--shadow-color);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 1.5em;
+}
+
+.close-modal-btn {
+    color: var(--secondary-color);
+    font-size: 1.8em;
+    font-weight: bold;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    color: var(--danger-color);
+}
+
+.modal-body {
+    padding-top: var(--spacing-md);
+}
+
+.submit-form-btn {
+    width: 100%;
+    margin-top: var(--spacing-lg);
+}
+
+/* Styles pour les tâches affichées dans la modale */
+.modal-task-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    max-height: 400px; /* Limite la hauteur et permet le défilement */
+    overflow-y: auto;
+    padding-right: var(--spacing-sm); /* Pour la barre de défilement */
+}
+
+.modal-task-item {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--primary-color);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Ombre plus légère */
+}
+
+.modal-task-item.completed {
+    border-left-color: var(--accent-color);
+    opacity: 0.8;
+}
+
+.modal-task-item .task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.modal-task-item .task-checkbox {
+    margin-right: var(--spacing-sm);
+    transform: scale(1.2);
+    flex-shrink: 0;
+}
+
+.modal-task-item .task-title-detail {
+    margin: 0;
+    font-size: 1.1em; /* Un peu plus petit que dans la vue jour normale */
+    color: var(--primary-color-dark);
+    flex-grow: 1;
+}
+
+.modal-task-item .task-time {
+    font-size: 0.8em;
+    color: var(--secondary-color);
+    margin-left: var(--spacing-sm);
+    font-weight: normal;
+}
+
+.modal-task-item .priority-badge {
+    margin-left: var(--spacing-md);
+    font-size: 0.65em; /* Badge plus petit */
+}
+
+/* MODIF : Alignement de la description dans la modale */
+.modal-task-item .task-description-detail {
+    margin-top: 0;
+    color: var(--text-color);
+    font-size: 0.9em;
+    margin-left: 35px; /* Alignement précis avec le texte du titre */
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+/* MODIF : Actions des boutons dans la modale */
+.modal-task-item .task-actions-detail {
+    display: flex; /* Active Flexbox */
+    gap: var(--spacing-sm); /* Espacement entre les boutons */
+    justify-content: flex-end; /* Aligne à droite */
+    border-top: 1px dashed var(--border-color);
+    padding-top: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+/* Suppression des styles spécifiques aux boutons ici pour une unification plus bas */
+/* .modal-task-item .task-actions-detail button {} */
+
+.no-events-modal {
+    text-align: center;
+    color: var(--secondary-color);
+    font-style: italic;
+    padding: var(--spacing-lg);
+}
+
+/* --- Dashboard --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.dashboard-card {
+    background-color: var(--surface-color);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-card .value {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.dashboard-card .label {
+    font-size: 1em;
+    color: var(--secondary-color);
+}
+
+.recent-activity {
+    background-color: var(--surface-color);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.recent-activity h3 {
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.activity-list {
+    list-style: none;
+}
+
+.activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item div {
+    display: flex;
+    align-items: center;
+}
+
+.activity-item i {
+    margin-right: var(--spacing-sm);
+    color: var(--primary-color);
+}
+
+.activity-item span {
+    font-weight: bold;
+}
+
+.activity-item small {
+    color: var(--secondary-color);
+}
+
+.activity-item.placeholder {
+    font-style: italic;
+    color: var(--secondary-color);
+    text-align: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+/* Floating Action Button */
+.add-task-floating-btn {
+    position: fixed;
+    bottom: var(--spacing-xl);
+    right: var(--spacing-xl);
+    background-color: var(--accent-color);
+    color: var(--text-color-light);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8em;
+    box-shadow: 0 5px 10px var(--shadow-color);
+    z-index: 1000;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.add-task-floating-btn:hover {
+    background-color: var(--accent-color-dark);
+    transform: translateY(-3px);
+}
+
+/* --- Mes Tâches --- */
+.tasks-controls {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne */
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.tasks-controls .form-group {
+    margin-bottom: 0; /* Supprime le marge par défaut du form-group */
+    flex: 1; /* Permet aux éléments de prendre de l'espace */
+    min-width: 150px; /* Largeur minimale pour les selects/inputs */
+}
+
+.tasks-controls .form-group label {
+    margin-bottom: var(--spacing-xs);
+}
+
+.tasks-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.task-item {
+    background-color: var(--surface-color);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+    display: flex;
+    align-items: center; /* MODIF : Aligne les éléments du task-item au centre verticalement */
+    justify-content: space-between; /* MODIF : Pousse le task-info à gauche et les actions à droite */
+    transition: transform 0.2s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+}
+
+.task-item.completed {
+    opacity: 0.7;
+    background-color: var(--background-color);
+}
+
+.task-item .task-info {
+    display: flex;
+    align-items: flex-start; /* Aligne la checkbox en haut de la tâche */
+    flex-grow: 1;
+    margin-right: var(--spacing-md);
+}
+
+.task-item .task-checkbox {
+    margin-right: var(--spacing-md);
+    transform: scale(1.2); /* Agrandit la checkbox */
+    flex-shrink: 0; /* Empêche la checkbox de se rétrécir */
+    margin-top: 5px; /* Pour l'aligner avec le texte du titre */
+}
+
+.task-item .task-title {
+    font-weight: bold;
+    color: var(--primary-color-dark);
+    flex-grow: 1;
+}
+
+.task-item .task-title.priority-urgent { color: var(--danger-color); }
+.task-item .task-title.priority-high { color: var(--primary-color-dark); }
+
+/* MODIF : Alignement de la description des tâches */
+.task-item .task-description {
+    font-size: 0.9em;
+    color: var(--secondary-color);
+    margin-top: var(--spacing-xs);
+    /* Calcul basé sur la checkbox de 1.2em (~19.2px) + marge droite (16px) = ~35.2px.
+       Utilisons 35px pour un alignement précis. */
+    margin-left: 35px;
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+/* MODIF : Alignement du tag projet */
+.task-item .task-project-tag {
+    background-color: var(--secondary-color);
+    color: var(--text-color-light);
+    padding: 2px 8px;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.75em;
+    margin-left: 35px; /* Aligne le tag projet avec la description */
+    margin-top: var(--spacing-xs); /* Petit espace avec la description */
+    white-space: nowrap;
+    display: inline-block;
+}
+
+/* MODIF : Actions des boutons (Editer/Supprimer) pour les tâches dans la liste */
+.task-item .task-actions {
+    display: flex; /* Active Flexbox pour aligner les boutons */
+    gap: var(--spacing-sm); /* Espacement entre les boutons */
+    align-items: center; /* Centre verticalement les icônes */
+    flex-shrink: 0; /* Empêche les actions de rétrécir */
+}
+/* Styles des boutons maintenant unifiés plus bas, suppression de ces blocs */
+/* .task-item .task-actions button {} */
+/* .task-item .task-actions button:hover {} */
+/* .task-item .task-actions .delete-task-btn:hover {} */
+
+.task-item.placeholder {
+    font-style: italic;
+    color: var(--secondary-color);
+    text-align: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+/* --- Calendrier --- */
+.calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    background-color: var(--surface-color);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.calendar-controls .nav-buttons button {
+    background: none;
+    color: var(--primary-color);
+    font-size: 1.2em;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+}
+
+.calendar-controls .nav-buttons button:hover {
+    background-color: var(--background-color);
+}
+
+.calendar-controls h2 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 1.5em;
+}
+
+.view-switcher .view-btn {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9em;
+    margin-left: var(--spacing-xs);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.view-switcher .view-btn.active {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+.view-switcher .view-btn:not(.active):hover {
+    background-color: var(--border-color);
+}
+
+.calendar-display {
+    background-color: var(--surface-color);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.calendar-grid-template {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--border-color); /* Pour les lignes de la grille */
+    border-radius: var(--border-radius-md);
+    overflow: hidden; /* Pour les coins arrondis */
+}
+
+.calendar-day-header {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    font-weight: bold;
+    text-align: center;
+    padding: var(--spacing-sm);
+    font-size: 0.9em;
+}
+
+.calendar-day {
+    background-color: var(--background-color);
+    min-height: 100px; /* Hauteur minimale pour chaque jour */
+    padding: var(--spacing-sm);
+    text-align: right;
+    font-size: 1.2em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.calendar-day:hover:not(.empty) {
+    background-color: var(--border-color);
+}
+
+.calendar-day.empty {
+    background-color: var(--surface-color);
+    color: var(--secondary-color);
+    opacity: 0.5;
+    cursor: default;
+}
+
+.calendar-day.today {
+    background-color: var(--accent-color);
+    color: var(--text-color-light);
+    font-weight: bold;
+}
+
+.calendar-day.has-events {
+    background-color: var(--surface-color);
+    /* Peut-être une ombre ou une bordure pour indiquer des événements */
+}
+
+.calendar-day.today .event-badge {
+    background-color: rgba(0, 0, 0, 0.2); /* Moins visible sur le jour actuel */
+}
+
+.event-badge {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: var(--border-radius-sm);
+    margin-top: var(--spacing-xs);
+    white-space: nowrap;
+}
+
+/* Styles pour les badges de priorité sur les tâches (si tu veux les utiliser) */
+.priority-badge {
+    padding: 3px 8px;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.75em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--text-color-light); /* Couleur du texte sur le badge */
+}
+
+.priority-badge.priority-low { background-color: #17a2b8; } /* Info blue */
+.priority-badge.priority-medium { background-color: #007bff; } /* Primary blue */
+.priority-badge.priority-high { background-color: #ffc107; } /* Warning yellow */
+.priority-badge.priority-urgent { background-color: #dc3545; } /* Danger red */
+
+/* Styles pour le texte de la tâche dans la liste, basé sur la priorité */
+.task-title.priority-urgent { color: var(--danger-color); font-weight: bold; }
+.task-title.priority-high { color: var(--primary-color-dark); }
+
+/* Grille de la vue semaine */
+.calendar-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 colonnes pour les jours */
+    background-color: var(--border-color);
+    gap: 1px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+}
+
+.week-day-header {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    font-weight: bold;
+    text-align: center;
+    padding: var(--spacing-sm) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.week-day-header:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.week-day-header.today {
+    background-color: var(--accent-color); /* Couleur d'aujourd'hui en semaine */
+}
+
+.week-day-header .day-name {
+    font-size: 0.9em;
+}
+
+.week-day-header .day-date {
+    font-size: 1.2em;
+    margin-top: 5px;
+}
+
+.week-events-container {
+    grid-column: 1 / -1; /* S'étend sur toutes les colonnes de la grille */
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--border-color); /* Pour les séparateurs */
+    border-top: 1px solid var(--border-color);
+}
+
+.week-events-day {
+    background-color: var(--surface-color);
+    min-height: 150px; /* Hauteur minimale pour les jours de la semaine */
+    padding: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    overflow-y: auto; /* Permet le défilement si beaucoup d'événements */
+}
+
+.week-events-day .no-events {
+    font-style: italic;
+    color: var(--secondary-color);
+    text-align: center;
+    margin-top: var(--spacing-md);
+}
+
+.week-task-item {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.week-task-item:hover {
+    background-color: var(--border-color);
+}
+
+.week-task-item.completed {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.week-task-item .fas.fa-circle {
+    font-size: 0.7em;
+    /* Pour la couleur du cercle selon la priorité */
+}
+.week-task-item .fas.fa-circle.low { color: #17a2b8; }
+.week-task-item .fas.fa-circle.medium { color: var(--primary-color); }
+.week-task-item .fas.fa-circle.high { color: #ffc107; }
+.week-task-item .fas.fa-circle.urgent { color: var(--danger-color); }
+
+/* Vue Jour */
+.calendar-day-view {
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.day-view-task-item {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--primary-color); /* Barre latérale pour la tâche */
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.day-view-task-item.completed {
+    border-left-color: var(--accent-color); /* Vert pour tâche complétée */
+    opacity: 0.8;
+}
+
+.day-view-task-item .task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.day-view-task-item .task-checkbox {
+    margin-right: var(--spacing-sm);
+    transform: scale(1.2); /* Agrandir la checkbox */
+}
+
+.day-view-task-item .task-title-detail {
+    margin: 0;
+    font-size: 1.3em;
+    color: var(--primary-color-dark);
+    flex-grow: 1;
+}
+
+.day-view-task-item .task-time {
+    font-size: 0.9em;
+    color: var(--secondary-color);
+    margin-left: var(--spacing-sm);
+    font-weight: normal;
+}
+
+.day-view-task-item .priority-badge {
+    margin-left: var(--spacing-md);
+}
+
+/* MODIF : Alignement de la description dans la vue jour */
+.day-view-task-item .task-description-detail {
+    margin-top: 0;
+    color: var(--text-color);
+    font-size: 1em;
+    margin-left: 35px; /* Alignement précis avec le texte du titre */
+    line-height: 1.4;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+/* MODIF : Actions des boutons dans la vue jour */
+.day-view-task-item .task-actions-detail {
+    display: flex; /* Active Flexbox */
+    gap: var(--spacing-sm); /* Espacement entre les boutons */
+    justify-content: flex-end; /* Aligne à droite */
+    border-top: 1px dashed var(--border-color);
+    padding-top: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+/* Suppression des styles spécifiques aux boutons ici pour une unification plus bas */
+/* .day-view-task-item .task-actions-detail button {} */
+
+/* --- Projets et Espaces --- */
+.projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.projects-header h3 {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.project-card {
+    background-color: var(--surface-color);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+}
+
+.project-card h4 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-xs);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.project-card h4 .fas {
+    margin-right: var(--spacing-sm);
+    color: var(--secondary-color);
+}
+
+.project-card p {
+    font-size: 0.9em;
+    color: var(--secondary-color);
+    flex-grow: 1; /* Permet à la description de prendre de la place */
+    margin-bottom: var(--spacing-md);
+}
+
+.project-progress {
+    height: 8px;
+    background-color: var(--border-color);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-xs);
+    overflow: hidden;
+}
+
+.project-progress-bar {
+    height: 100%;
+    background-color: var(--accent-color);
+    border-radius: var(--border-radius-sm);
+    transition: width 0.5s ease-in-out;
+}
+
+.project-card small {
+    font-size: 0.8em;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* MODIF : Actions des boutons (Editer/Supprimer) pour les projets */
+.project-actions {
+    display: flex; /* Active Flexbox */
+    justify-content: flex-end; /* Aligne à droite */
+    gap: var(--spacing-sm); /* Espacement entre les boutons */
+    margin-top: var(--spacing-md);
+}
+/* Styles des boutons maintenant unifiés plus bas, suppression de ces blocs */
+/* .project-actions button {} */
+
+.project-card.placeholder {
+    font-style: italic;
+    color: var(--secondary-color);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-lg);
+}
+.project-card.placeholder .fas {
+    font-size: 2em;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-color);
+}
+
+/* --- RÈGLES UNIFIÉES POUR LES BOUTONS D'ACTION (Éditer/Supprimer) --- */
+/* Cible tous les boutons d'action d'édition et suppression pour une cohérence maximale */
+.task-item .task-actions button,
+.modal-task-item .task-actions-detail button,
+.day-view-task-item .task-actions-detail button,
+.project-actions button {
+    background: none; /* Pas de fond, car ce sont des icônes */
+    border: none;
+    color: var(--secondary-color); /* Couleur neutre par défaut */
+    font-size: 1.1em; /* Taille des icônes pour un bon équilibre */
+    padding: 5px; /* Augmente la zone de clic sans déformer visuellement */
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s ease; /* Transitions douces */
+    border-radius: var(--border-radius-sm); /* Légèrement arrondi au survol */
+}
+
+.task-item .task-actions button:hover,
+.modal-task-item .task-actions-detail button:hover,
+.day-view-task-item .task-actions-detail button:hover,
+.project-actions button:hover {
+    color: var(--primary-color); /* Couleur d'action principale au survol */
+    transform: translateY(-1px); /* Léger effet de soulèvement */
+}
+
+/* Styles spécifiques pour le bouton de suppression */
+.task-item .task-actions .delete-task-btn:hover,
+.modal-task-item .task-actions-detail .delete-task-btn:hover,
+.day-view-task-item .task-actions-detail .delete-task-btn:hover,
+.project-actions .delete-project-btn:hover {
+    color: var(--danger-color); /* Rouge distinctif pour la suppression */
+    transform: translateY(-1px);
+}
+
+
+/* --- Rapports et Statistiques --- */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.chart-container, .metrics-card {
+    background-color: var(--surface-color);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+    height: 350px; /* Hauteur fixe pour les conteneurs de graphiques */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* NOUVEAU: Assure que le canvas ne dépasse pas son conteneur */
+.chart-container canvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.metrics-card h4 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-color);
+}
+
+.metrics-card .metric-value {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* --- Paramètres --- */
+.settings-section {
+    background-color: var(--surface-color);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 5px var(--shadow-color);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.settings-section h3 {
+    color: var(--text-color);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+}
+
+.setting-group {
+    margin-bottom: var(--spacing-xl);
+}
+
+.setting-group label {
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+    display: block;
+}
+
+.radio-group {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+}
+
+.radio-group input[type="radio"] {
+    margin-right: var(--spacing-xs);
+    width: auto; /* Annule le 100% par défaut */
+}
+
+.checkbox-group {
+    margin-top: var(--spacing-sm);
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: var(--spacing-xs);
+    width: auto;
+}
+
+.settings-section .save-settings-btn {
+    width: auto; /* Bouton pas en 100% */
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+    display: block; /* Pour centrer si nécessaire */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Media Queries pour la Réactivité --- */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 80px; /* Collapsed by default on smaller screens */
+    }
+
+    .sidebar .logo-text,
+    .sidebar .nav-text,
+    .sidebar .user-info p,
+    .sidebar .add-new-text {
+        display: none;
+    }
+
+    .sidebar .nav-item {
+        justify-content: center;
+    }
+
+    .sidebar .user-profile .avatar {
+        margin-right: 0;
+    }
+
+    .sidebar .add-new-btn {
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sidebar .toggle-sidebar-btn {
+        left: 100%;
+        transform: translateX(-50%) rotate(180deg);
+    }
+
+    .main-content {
+        padding: var(--spacing-md);
+    }
+
+    .header h1 {
+        font-size: 1.8em;
+    }
+
+    /* Ajuste la hauteur du conteneur sur les écrans plus petits */
+    .chart-container {
+        height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: var(--spacing-md);
+        flex-direction: row; /* Horizontal layout for mobile sidebar */
+        justify-content: space-between;
+        align-items: center;
+        position: fixed; /* Fixe la sidebar en haut */
+        top: 0;
+        left: 0;
+        box-shadow: 0 2px 5px var(--shadow-color);
+    }
+
+    .sidebar.collapsed {
+        width: 100%; /* Pas de différence pour la taille */
+    }
+
+    .sidebar .logo,
+    .sidebar .user-profile {
+        margin-bottom: 0;
+    }
+
+    .sidebar .nav-list {
+        display: none; /* Cache la navigation principale sur mobile */
+    }
+
+    .sidebar .add-new-btn {
+        margin-top: 0;
+        width: 45px;
+        height: 45px;
+        font-size: 1.5em;
+    }
+
+    .sidebar .toggle-sidebar-btn {
+        display: none; /* Cache le bouton de bascule sur mobile */
+    }
+
+    .main-content {
+        padding-top: calc(var(--spacing-md) + 60px); /* Ajoute de l'espace pour la sidebar fixe */
+    }
+
+    .dashboard-grid,
+    .projects-grid,
+    .reports-grid {
+        grid-template-columns: 1fr; /* Une colonne sur les petits écrans */
+    }
+
+    .tasks-controls {
+        flex-direction: column; /* Les filtres s'empilent */
+        align-items: stretch;
+    }
+
+    .tasks-controls .form-group {
+        min-width: unset; /* Annule la largeur minimale */
+    }
+
+    .task-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-item .task-actions {
+        margin-top: var(--spacing-sm);
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .task-item .task-info {
+        width: 100%;
+    }
+
+    /* MODIF : Réinitialise l'indentation de la description sur mobile */
+    .task-item .task-description {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    /* MODIF : Aligne le tag projet sur mobile */
+    .task-item .task-project-tag {
+        margin-left: 0;
+        width: 100%;
+        text-align: left;
+    }
+
+    .add-task-floating-btn {
+        bottom: var(--spacing-md);
+        right: var(--spacing-md);
+        width: 50px;
+        height: 50px;
+        font-size: 1.5em;
+    }
+
+    .calendar-week-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur mobile pour la vue semaine */
+    }
+
+    .week-day-header {
+        border-bottom: 1px solid var(--border-color); /* Séparateur pour chaque jour */
+    }
+
+    .week-events-container {
+        grid-template-columns: 1fr; /* Une seule colonne pour les événements de la semaine */
+    }
+
+    .week-events-day {
+        border-bottom: 1px solid var(--border-color);
+        min-height: auto; /* Hauteur auto pour s'adapter au contenu */
+    }
+
+    .calendar-day-view {
+        padding: var(--spacing-sm);
+    }
+
+    /* Ajuste la hauteur du conteneur sur les écrans plus petits */
+    .chart-container {
+        height: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.5em;
+    }
+    .calendar-controls {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    .calendar-controls .view-switcher {
+        margin-top: var(--spacing-sm);
+    }
+    /* Ajuste la hauteur du conteneur sur les très petits écrans */
+    .chart-container {
+        height: 250px;
+    }
+}
